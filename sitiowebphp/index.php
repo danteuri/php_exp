@@ -1,11 +1,11 @@
 <?php include "template/header.php"?>
             <div class="jumbotron">
-                <h1 class="display-3">Jumbo heading</h1>
-                <p class="lead">Jumbo helper text</p>
+                <h1 class="display-3">PHP in my life</h1>
+                <p class="lead">Un simple CRUD de php</p>
                 <hr class="my-2">
-                <p>More info</p>
+                <p>Mas info</p>
                 <p class="lead">
-                    <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Jumbo action name</a>
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Aqui</a>
                 </p>
             </div>
-<?php include "template/pie.php"?>
+<?php include "template/footer.php"?>
