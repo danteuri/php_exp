@@ -1,3 +1,8 @@
+<?php
+if ($_POST) {
+  header('Location:inicio.php');
+}
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -12,24 +17,31 @@
   <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+          <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <br><br><br><br><br>
                 <div class="card">
                     <div class="card-header">
                         Login
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form method="POST">
+
+                        
                         <div class = "form-group">
-                        <label for="exampleInputEmail1">Usuario</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <label>Usuario</label>
+                        <input type="text" class="form-control" name="user" aria-describedby="emailHelp" placeholder="Put your username here">
+                        <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <small class="form-text text-muted">Nosotros nunca compartiremos su email con otra persona</small>
                         </div>
 
                         <div class="form-group">
-                        <label for="exampleInputPassword1">Contrasenia</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        <label>Contrasenia</label>
+                        <input type="password" class="form-control" name="password" placeholder="Put your password here">
                         </div>
-                        <button type="submit" class="btn btn-primary">Entrar al Administrador</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
+
+
                         </form>
                     </div>
                 </div>
