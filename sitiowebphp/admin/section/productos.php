@@ -4,37 +4,42 @@ $txtID=(isset($_POST['txtID']))?$_POST['txtID']:"";
 $txtNombre=(isset($_POST['txtNombre']))?$_POST['txtNombre']:"";
 $txtImagen=(isset($_FILES['txtImagen']['name']))?$_FILES['txtImagen']['name']:"";
 $action=(isset($_POST['action']))?$_POST['action']:"";
-echo $txtID."<br/>";
-echo $txtNombre."<br/>";
-echo $txtImagen."<br/>";
-echo $action."<br/>";
 
-$host="localhost";
-$db="sitiowebphp";
-$usuario="root";
-$contrasenia="";
-
-try {
-    $conexion=new PDO("mysql:host=$host;dbname=$db",$usuario,$contrasenia);
-    if($conexion){echo "conectado al sistema";}
-} catch ( Exception $ex) {
-    echo $ex ->getMessage();
-}
+include "../config/db.php";
 
 switch($action){
     case"Agregar":
-        //INSERT INTO `libros` (`id`, `nombre`, `imagen`) VALUES (NULL, 'Libro de php', 'imagen.jpg');
-        $sentenciasql=$conexion->prepare("INSERT INTO `libros` (`id`, `nombre`, `imagen`) VALUES (NULL, 'Libro de php', 'imagen.jpg');");
-        echo "presionado boton agregar";
+        $sentenciasql=$conexion->prepare("INSERT INTO libros (nombre, imagen) VALUES (:nombre, :imagen);");
+        $sentenciasql->bindParam(':nombre', $txtNombre);
+        $sentenciasql->bindParam(':imagen', $txtImagen);
+        $sentenciasql->execute();
+        //echo "presionado boton agregar";
         break;
     case"Modificar":
-        echo "presionado boton Modificar";
+        //echo "presionado boton Modificar";
         break;
     case"Cancelar":
-        echo "presionado boton Cancelar";
+        //echo "presionado boton Cancelar";
         break;
-    
+    case"Seleccionar":
+        //echo "presionado boton Seleccionar";
+        $sentenciasql=$conexion->prepare("SELECT * FROM libros WHERE id=:id");
+        $sentenciasql->bindParam(':id',$txtID);
+        $sentenciasql->execute();
+        $libro=$sentenciasql->fetch(PDO::FETCH_LAZY);
+        $txtNombre=$libro['nombre'];
+        $txtImagen=$libro['imagen'];
+        break;
+    case"Borrar":
+        //echo "presionado boton Borrar";
+        $sentenciasql=$conexion->prepare("DELETE FROM libros WHERE id=:id");
+        $sentenciasql->bindParam(':id',$txtID);
+        $sentenciasql->execute();
+        break;
 }
+$sentenciasql=$conexion->prepare("SELECT * FROM libros");
+$sentenciasql->execute();
+$ListaLibros=$sentenciasql->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <div class="col-md-5">
     <div class="card">
@@ -46,14 +51,15 @@ switch($action){
             <form method="POST" enctype="multipart/form-data" >
                 <div class = "form-group">
                     <label for="txtID">ID:</label>
-                    <input type="text" class="form-control" name="txtID" id="txtID" placeholder="ID">
+                    <input type="text" class="form-control" value="<?php echo $txtID?>" name="txtID" id="txtID" placeholder="ID">
                 </div>
                 <div class = "form-group">
                     <label for="txtNombre">Nombre:</label>
-                    <input type="text" class="form-control" name="txtNombre" id="txtNombre" placeholder="Nombre">
+                    <input type="text" class="form-control" value="<?php echo $txtNombre?>" name="txtNombre" id="txtNombre" placeholder="Nombre">
                 </div>
                 <div class = "form-group">
                     <label for="">Imagen</label>
+                    <?php echo $txtImagen;?>
                     <input type="file" class="form-control" name="txtImagen" id="txtImagen" placeholder="ESOOOOO">
                 </div>
                 <div class="btn-group" role="group" aria-label="">
@@ -81,12 +87,20 @@ switch($action){
             </tr>
         </thead>
         <tbody>
+            <?php foreach($ListaLibros as $libro){?>
             <tr>
-                <td>2</td>
-                <td>Aprende PHP</td>
-                <td>Imagen.jpg</td>
-                <td>Seleccionar o Borrar</td>
+                <td><?php echo $libro['id'];?></td>
+                <td><?php echo $libro['nombre'];?></td>
+                <td><?php echo $libro['imagen'];?></td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="txtID" id="txtID" value="<?php echo $libro['id']; ?>">
+                        <input type="submit" name="action" value="Seleccionar" class="btn btn-primary">
+                        <input type="submit" name="action" value="Borrar" class="btn btn-danger"/>
+                    </form>
+                </td>
             </tr>
+            <?php }?>
         </tbody>
     </table>
 </div>
